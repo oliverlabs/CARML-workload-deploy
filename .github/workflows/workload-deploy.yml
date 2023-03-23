@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       resourceGroupName:
-        description: "The name of the resource group to deploy to"
+        description: "resourceGroupName"
         required: true
         type: string
       location:
         description: "The location to deploy to"
-        required: true
+        required: false
         type: string
   push:
     branches:
@@ -54,6 +54,6 @@ jobs:
         name: Deploy workload
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: test-carml
+          resourceGroupName: ${{ inputs.resourceGroupName }}
           template: ./deploy/rg.bicep
           parameters: ./deploy/parameters/rg.parameters.json

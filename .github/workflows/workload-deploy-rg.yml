@@ -11,7 +11,8 @@ on:
     branches:
       - main
     paths: # Only run when these paths change
-      - "deploy/**/*" # trigger on any change in the deploy folder
+      - "deploy/parameters/rg*" # trigger on any change in the deploy/parameters folder
+      - "deploy/rg.bicep" # trigger on a change in the rg.bicep file
 
 permissions:
   id-token: write

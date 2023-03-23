@@ -11,10 +11,7 @@ permissions:
   contents: read
 
 env:
-  MODULE_NAME: storage-account
-  MODULE_REGISTRY_SERVER: oliverlabs.azurecr.io
-  MODULE_FILE_PATH: modules/storage-account/main.bicep
-  MODULE_METADATA_FILE_PATH: modules/storage-account/metadata.json
+  MODULE_FILE_PATH: modules/rg.bicep
   AZURE_RESOURCEGROUP_NAME: carml-sample-workload
 
 jobs:

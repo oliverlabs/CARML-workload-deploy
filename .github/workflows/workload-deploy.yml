@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 env:
-  MODULE_FILE_PATH: modules/rg.bicep
+  MODULE_FILE_PATH: ./modules/rg.bicep
   AZURE_RESOURCEGROUP_NAME: carml-sample-workload
 
 jobs:

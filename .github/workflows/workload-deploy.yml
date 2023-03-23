@@ -5,14 +5,15 @@ on:
   push:
     branches:
       - main
+    paths: # Only run when these paths change
+      - "deploy/**"
 
 permissions:
   id-token: write
   contents: read
 
 env:
-  MODULE_FILE_PATH: ./modules/rg.bicep
-  AZURE_RESOURCEGROUP_NAME: carml-sample-workload
+  MODULE_FILE_PATH: modules/rg.bicep
 
 jobs:
   lint:

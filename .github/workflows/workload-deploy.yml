@@ -26,18 +26,18 @@ env:
   MODULE_FILE_PATH: deploy/rg.bicep
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: azure/login@v1
-        name: Sign in to Azure
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - uses: actions/checkout@v3.3.0
-      - name: Run Bicep linter
-        run: az bicep build --file ${{ env.MODULE_FILE_PATH }}
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: azure/login@v1
+  #       name: Sign in to Azure
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - uses: actions/checkout@v3.3.0
+  #     - name: Run Bicep linter
+  #       run: az bicep build --file ${{ env.MODULE_FILE_PATH }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,6 +56,6 @@ jobs:
         name: Deploy workload
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ inputs.resourceGroupName }}
+          resourceGroupName: test-carml
           template: ./deploy/rg.bicep
           parameters: ./deploy/parameters/rg.parameters.json

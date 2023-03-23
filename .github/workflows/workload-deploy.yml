@@ -1,0 +1,46 @@
+name: CARML Sample Workload Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  MODULE_NAME: storage-account
+  MODULE_REGISTRY_SERVER: oliverlabs.azurecr.io
+  MODULE_FILE_PATH: modules/storage-account/main.bicep
+  MODULE_METADATA_FILE_PATH: modules/storage-account/metadata.json
+  AZURE_RESOURCEGROUP_NAME: carml-sample-workload
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Bicep linter
+        run: az bicep build --file ${{ env.MODULE_FILE_PATH }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - uses: actions/checkout@v3.3.0
+        with:
+          path: repo
+      - uses: azure/login@v1
+        name: Sign in to Azure
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: azure/arm-deploy@v1
+        name: Deploy workload
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          template: ./deploy/main.bicep
+          parameters: ./deploy/parameters/rg.parameters.json

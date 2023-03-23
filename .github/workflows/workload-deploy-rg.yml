@@ -1,46 +1,43 @@
-name: CARML Sample Workload Deploy
+name: CARML Workload Deploy - RG
 
 on:
   workflow_dispatch:
-    inputs:
-      resourceGroupName:
-        description: "resourceGroupName"
-        required: true
-        type: string
-      location:
-        description: "The location to deploy to"
-        required: false
-        type: string
+  # inputs:
+  #   location:
+  #     description: "location"
+  #     required: true
+  #     type: string
   push:
     branches:
       - main
     paths: # Only run when these paths change
-      - "deploy/**"
+      - "deploy/**/*" # trigger on any change in the deploy folder
 
 permissions:
   id-token: write
   contents: read
 
 env:
+  LOCATION: westeurope
   MODULE_FILE_PATH: deploy/rg.bicep
   PARAMETERS_FILE_PATH: deploy/parameters/rg.parameters.json
 
 jobs:
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: azure/login@v1
-  #       name: Sign in to Azure
-  #       with:
-  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  #     - uses: actions/checkout@v3.3.0
-  #     - name: Run Bicep linter
-  #       run: az bicep build --file ${{ env.MODULE_FILE_PATH }}
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/login@v1
+        name: Sign in to Azure
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: actions/checkout@v3.3.0
+      - name: Run Bicep linter
+        run: az bicep build --file ${{ env.MODULE_FILE_PATH }}
   deploy:
     runs-on: ubuntu-latest
-    # needs: [lint]
+    needs: [lint]
     steps:
       - uses: actions/checkout@v3.3.0
       - uses: azure/login@v1
@@ -54,6 +51,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           scope: subscription
-          region: ${{ inputs.location }}
+          # region: ${{ inputs.location }} # Uncomment this line and comment the next line to use the input parameter
+          region: ${{ env.LOCATION }}
           template: ${{ env.MODULE_FILE_PATH }}
           parameters: ${{ env.PARAMETERS_FILE_PATH }}

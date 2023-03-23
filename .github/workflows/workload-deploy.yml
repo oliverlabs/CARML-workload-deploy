@@ -39,7 +39,7 @@ jobs:
   #       run: az bicep build --file ${{ env.MODULE_FILE_PATH }}
   deploy:
     runs-on: ubuntu-latest
-    needs: [lint]
+    # needs: [lint]
     steps:
       - uses: actions/checkout@v3.3.0
         with:

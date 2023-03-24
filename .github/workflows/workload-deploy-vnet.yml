@@ -1,4 +1,5 @@
 name: CARML Workload Deploy - VNet
+concurrency: carml-deploy # Only allow one instance of this workflow to run at a time
 
 on:
   workflow_dispatch:
@@ -49,6 +50,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         name: Deploy CARML workload
         with:
+          deploymentName: ${{ github.run_number }}
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ${{ env.MODULE_FILE_PATH }}
           parameters: ${{ env.PARAMETERS_FILE_PATH }}

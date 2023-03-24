@@ -27,14 +27,15 @@ jobs:
         addSpnToEnvironment: true
         azureSubscription: '$(azureSubscription)'
         connectedServiceNameARM: '$(ServiceConnectionName)'
-        scriptType: ps
+        scriptType: pscore
         scriptLocation: inlineScript
         inlineScript: |
           # Log into Az-PowerShell context
           # . $profile # Load PS-Profile configuration
           $SecuredPassword = ConvertTo-SecureString -AsPlainText -String $env:servicePrincipalKey
           $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $env:servicePrincipalId, $SecuredPassword
-          $null = Connect-AzAccount -ServicePrincipal -TenantId $env:tenantId -Credential $Credential
+          az login --service-principal --username $env:servicePrincipalId --password $env:servicePrincipalKey --tenant $env:tenantId
+          # $null = Connect-AzAccount -ServicePrincipal -TenantId $env:tenantId -Credential $Credential
           # Deploy Bicep file
           az deployment group create --resource-group $(ResourceGroupName) --template-file deploy/vnet.bicep --parameters deploy/parameters/vnet.parameters.json
 

@@ -1,0 +1,30 @@
+trigger: none
+name: 'Multi-Resource Deployment'
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ServiceConnectionName: 'AzureConnection'
+  DeploymentDefaultLocation: 'westeurope'
+
+jobs:
+- job:
+  steps:
+    - task: AzureCLI@2
+      displayName: 'deploy a Bicep file from Azure CLI'
+      inputs:
+        addSpnToEnvironment: true
+        azureSubscription: '$(azureSubscription)'
+        connectedServiceNameARM: '$(ServiceConnectionName)'
+        scriptType: pscore
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Log into Az-PowerShell context
+          # . $profile # Load PS-Profile configuration
+          $SecuredPassword = ConvertTo-SecureString -AsPlainText -String $env:servicePrincipalKey
+          $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $env:servicePrincipalId, $SecuredPassword
+          az login --service-principal --username $env:servicePrincipalId --password $env:servicePrincipalKey --tenant $env:tenantId
+          # $null = Connect-AzAccount -ServicePrincipal -TenantId $env:tenantId -Credential $Credential
+          # Deploy Bicep file
+          az deployment sub create --location $(DeploymentDefaultLocation) --template-file deploy/multi.bicep --parameters deploy/parameters/multi.parameters.json

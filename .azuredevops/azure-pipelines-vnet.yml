@@ -26,6 +26,7 @@ jobs:
       inputs:
         addSpnToEnvironment: true
         azureSubscription: '$(azureSubscription)'
+        connectedServiceNameARM: '$(ServiceConnectionName)'
         scriptType: pscore
         scriptLocation: inlineScript
         inlineScript: |

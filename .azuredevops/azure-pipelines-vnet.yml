@@ -7,7 +7,7 @@ pool:
 variables:
   ServiceConnectionName: 'AzureTest'
   DeploymentDefaultLocation: 'westeurope'
-  ResourceGroupName: 'CARML-ado-rg'
+  ResourceGroupName: 'acr-rg'
 
 jobs:
 - job:

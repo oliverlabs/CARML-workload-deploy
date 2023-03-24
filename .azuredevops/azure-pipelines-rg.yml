@@ -1,0 +1,22 @@
+trigger: none
+name: 'ResourceGroup'
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ServiceConnectionName: 'AzureConnection'
+  DeploymentDefaultLocation: 'westeurope'
+  ResourceGroupName: 'CARML-ado-rg'
+
+jobs:
+- job:
+  steps:
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: 'Subscription'
+      connectedServiceName: $(ServiceConnectionName)
+      subscriptionName: $(subscriptionName)
+      location: $(DeploymentDefaultLocation)
+      csmFileLink: deploy/rg.bicep
+      csmParametersFile: deploy/parameters/rg.parameters.json

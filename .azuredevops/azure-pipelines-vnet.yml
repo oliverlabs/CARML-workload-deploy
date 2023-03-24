@@ -14,9 +14,9 @@ jobs:
   steps:
   - task: AzureResourceManagerTemplateDeployment@3
     inputs:
-      deploymentScope: 'Subscription'
+      deploymentScope: 'Resource Group'
       connectedServiceName: $(ServiceConnectionName)
-      subscriptionName: $(subscriptionName)
+      ResourceGroupName: $(ResourceGroupName)
       location: $(DeploymentDefaultLocation)
-      csmFile: deploy/rg.bicep
-      csmParametersFile: deploy/parameters/rg.parameters.json
+      csmFileLink: deploy/vnet.bicep
+      csmParametersFile: deploy/parameters/vnet.parameters.json

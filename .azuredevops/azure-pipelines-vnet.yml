@@ -5,7 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  ServiceConnectionName: 'AzureConnection'
+  ServiceConnectionName: 'AzureTest'
   DeploymentDefaultLocation: 'westeurope'
   ResourceGroupName: 'CARML-ado-rg'
 
@@ -15,8 +15,7 @@ jobs:
   - task: AzureResourceManagerTemplateDeployment@3
     inputs:
       deploymentScope: 'Resource Group'
-      azureResourceManagerConnection: $(ServiceConnectionName)
-      connectedServiceName: 'AzureConnection'
+      connectedServiceName: 'AzureTest'
       ResourceGroupName: $(ResourceGroupName)
       location: $(DeploymentDefaultLocation)
       csmFile: deploy/vnet.bicep

@@ -27,7 +27,7 @@ jobs:
         addSpnToEnvironment: true
         azureSubscription: '$(azureSubscription)'
         connectedServiceNameARM: '$(ServiceConnectionName)'
-        scriptType: pscore
+        scriptType: ps
         scriptLocation: inlineScript
         inlineScript: |
           # Log into Az-PowerShell context

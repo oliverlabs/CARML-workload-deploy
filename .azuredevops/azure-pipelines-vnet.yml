@@ -16,6 +16,7 @@ jobs:
     inputs:
       deploymentScope: 'Resource Group'
       azureResourceManagerConnection: $(ServiceConnectionName)
+      connectedServiceName: 'AzureConnection'
       ResourceGroupName: $(ResourceGroupName)
       location: $(DeploymentDefaultLocation)
       csmFile: deploy/vnet.bicep

@@ -1,0 +1,11 @@
+trigger: none
+name: 'ResourceGroup'
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- job:
+  steps:
+  - script: echo Hello world!
+    displayName: 'Placeholder step'

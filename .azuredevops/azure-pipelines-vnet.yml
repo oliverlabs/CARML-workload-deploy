@@ -1,5 +1,5 @@
 trigger: none
-name: 'VNet'
+name: 'VNet Deployment'
 
 pool:
   vmImage: ubuntu-latest

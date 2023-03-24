@@ -1,5 +1,5 @@
 trigger: none
-name: 'ResourceGroup'
+name: 'ResourceGroup Deployment'
 
 pool:
   vmImage: ubuntu-latest
@@ -7,16 +7,24 @@ pool:
 variables:
   ServiceConnectionName: 'AzureConnection'
   DeploymentDefaultLocation: 'westeurope'
-  ResourceGroupName: 'CARML-ado-rg'
 
 jobs:
 - job:
   steps:
-  - task: AzureResourceManagerTemplateDeployment@3
-    inputs:
-      deploymentScope: 'Subscription'
-      connectedServiceName: $(ServiceConnectionName)
-      subscriptionName: $(subscriptionName)
-      location: $(DeploymentDefaultLocation)
-      csmFileLink: deploy/rg.bicep
-      csmParametersFile: deploy/parameters/rg.parameters.json
+    - task: AzureCLI@2
+      displayName: 'deploy a Bicep file from Azure CLI'
+      inputs:
+        addSpnToEnvironment: true
+        azureSubscription: '$(azureSubscription)'
+        connectedServiceNameARM: '$(ServiceConnectionName)'
+        scriptType: pscore
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Log into Az-PowerShell context
+          # . $profile # Load PS-Profile configuration
+          $SecuredPassword = ConvertTo-SecureString -AsPlainText -String $env:servicePrincipalKey
+          $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $env:servicePrincipalId, $SecuredPassword
+          az login --service-principal --username $env:servicePrincipalId --password $env:servicePrincipalKey --tenant $env:tenantId
+          # $null = Connect-AzAccount -ServicePrincipal -TenantId $env:tenantId -Credential $Credential
+          # Deploy Bicep file
+          az deployment sub create --location $(DeploymentDefaultLocation) --template-file deploy/rg.bicep --parameters deploy/parameters/rg.parameters.json

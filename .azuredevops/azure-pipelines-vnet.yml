@@ -1,5 +1,5 @@
 trigger: none
-name: 'ResourceGroup'
+name: 'VNet'
 
 pool:
   vmImage: ubuntu-latest
@@ -15,8 +15,8 @@ jobs:
   - task: AzureResourceManagerTemplateDeployment@3
     inputs:
       deploymentScope: 'Resource Group'
-      connectedServiceName: $(ServiceConnectionName)
+      azureResourceManagerConnection: $(ServiceConnectionName)
       ResourceGroupName: $(ResourceGroupName)
       location: $(DeploymentDefaultLocation)
-      csmFileLink: deploy/vnet.bicep
+      csmFile: deploy/vnet.bicep
       csmParametersFile: deploy/parameters/vnet.parameters.json

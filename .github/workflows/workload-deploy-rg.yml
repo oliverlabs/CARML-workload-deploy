@@ -51,7 +51,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         name: Deploy workload
         with:
-          deploymentName: ${{ github.run_number }}
+          deploymentName: "gh-${{ github.run_number }}-${{ github.run_id }}"
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           scope: subscription
           # region: ${{ inputs.location }} # Uncomment this line and comment the next line to use the input parameter

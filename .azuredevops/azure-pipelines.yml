@@ -4,8 +4,17 @@ name: 'ResourceGroup'
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  ServiceConnectionName: 'AzureConnection'
+  DeploymentDefaultLocation: 'westeurope'
+  ResourceGroupName: 'CARML-ado-rg'
+
 jobs:
 - job:
   steps:
-  - script: echo Hello world!
-    displayName: 'Placeholder step'
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      connectedServiceName: $(ServiceConnectionName)
+      location: $(DeploymentDefaultLocation)
+      resourceGroupName: $(ResourceGroupName)
+      csmFile: deploy/rg.bicep
